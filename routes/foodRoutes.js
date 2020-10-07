@@ -1,49 +1,24 @@
-const express = require('express');
-const foodModel = require('../models/food');
+const express = require("express");
+const foodController = require('../controllers/foodController');
 
-const app = express();
+const router = express.Router();
 
 // get all food items
-app.get('/foods', async (req, res) => {
-    const foods = await foodModel.find({}).sort({id: -1});
-    try {
-      res.send(foods);
-    } catch (err) {
-      res.status(500).send(err);
-    }
-});
+router.get('/', foodController.read_all);
+
+// get a single item
+router.get('/:id', foodController.read_single);
+
+// get all except one
+router.get('/food/:id', foodController.read_all_except_one);
 
 // add a food item
-app.post('/food', async (req, res) => {
-    const food = new foodModel(req.body); 
-    try {
-      await food.save();
-      res.send(food);
-    } catch (err) {
-      res.status(500).send(err);
-    }
-});
+router.post('/', foodController.add_item);
 
 // delete a food item by it's id
-app.delete('/food/:id', async (req, res) => {
-    try{
-        const food = await foodModel.findByIdAndDelete(req.params.id);
-        if(!food) res.status(404).send("No item found");
-        res.status(200).send();
-    } catch(err) {
-        res.status(500).send(err);
-    }
-});
+router.delete('/:id', foodController.delete_item);
 
 //update an existing food item
-app.patch('/food/:id', async (req, res) => {
-    try {
-      const food = await foodModel.findByIdAndUpdate(req.params.id, req.body);
-      await food.save();
-      res.send(food);
-    } catch (err) {
-      res.status(500).send(err);
-    }
-});
+router.patch('/:id', foodController.update_item);
 
-module.exports = app;
+module.exports = router;
