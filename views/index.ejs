@@ -1,0 +1,31 @@
+
+<%- include('./partials/header.ejs') %>
+<body>
+    <%- include('./partials/nav.ejs') %>
+    <div class="container mt-4">
+        <div class="row">
+            <% if(foods.length > 0) { %>
+                <% foods.forEach(food => { %>
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="post-preview" style="margin-top: 50px;">
+              <a href="/foods/<%= food._id %>">
+                <h2 class="post-title">
+                  <%= food.name%>
+                </h2>
+                <h3 class="post-subtitle">
+                  <%= food.calories %>
+                </h3>
+              </a>
+            </div>
+            <hr>
+          </div>
+          <% } ) %>
+          <% } 
+          else { %>
+            <p>No food item found</p>
+            <% } %>
+        </div>
+      </div>
+</body>
+<%- include('./partials/footer.ejs') %>
+</html>
